@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Code;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+
+Route::get('/test', function(Request $request) {
+    $Code = Code::where('code', $request->code)->get();
+    if (count($Code) > 0)
+        return json_encode(array('status' => 'success'));
+
+        return json_encode(array('status' => 'error', 'message' => 'UNAUTHORIZED'));
 });

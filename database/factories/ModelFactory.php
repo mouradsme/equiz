@@ -17,4 +17,27 @@ $factory->define(Brackets\AdminAuth\Models\AdminUser::class, function (Faker\Gen
         'last_login_at' => $faker->dateTime,
         
     ];
+});/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Question::class, static function (Faker\Generator $faker) {
+    return [
+        'question' => $faker->sentence,
+        'right_answer' => $faker->sentence,
+        'answer_2' => $faker->sentence,
+        'answer_3' => $faker->sentence,
+        'answer_4' => $faker->sentence,
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Code::class, static function (Faker\Generator $faker) {
+    return [
+        'code' => $faker->sentence,
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
 });

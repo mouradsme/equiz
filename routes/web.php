@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Question;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $Questions = Question::all();
+    $quizData = array();
+    foreach ($Questions as $Question)
+        $quizData[] = array(
+            "question" => $Question->question,
+            "options" => array($Question->right_answer, $Question->answer_2, $Question->answer_3, $Question->answer_4),
+            "correct" => $Question->right_answer
+        );
+ 
+    return view('quiz', array("quizData" => $quizData));
 });
 
 
@@ -41,5 +50,36 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
         Route::post('/profile',                                     'ProfileController@updateProfile')->name('update-profile');
         Route::get('/password',                                     'ProfileController@editPassword')->name('edit-password');
         Route::post('/password',                                    'ProfileController@updatePassword')->name('update-password');
+    });
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(static function () {
+    Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin/')->group(static function() {
+        Route::prefix('questions')->name('questions/')->group(static function() {
+            Route::get('/',                                             'QuestionsController@index')->name('index');
+            Route::get('/create',                                       'QuestionsController@create')->name('create');
+            Route::post('/',                                            'QuestionsController@store')->name('store');
+            Route::get('/{question}/edit',                              'QuestionsController@edit')->name('edit');
+            Route::post('/bulk-destroy',                                'QuestionsController@bulkDestroy')->name('bulk-destroy');
+            Route::post('/{question}',                                  'QuestionsController@update')->name('update');
+            Route::delete('/{question}',                                'QuestionsController@destroy')->name('destroy');
+        });
+    });
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(static function () {
+    Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin/')->group(static function() {
+        Route::prefix('codes')->name('codes/')->group(static function() {
+            Route::get('/',                                             'CodesController@index')->name('index');
+            Route::get('/create',                                       'CodesController@create')->name('create');
+            Route::get('/bulk',                                         'CodesController@bulk')->name('bulk');
+            Route::post('/',                                            'CodesController@store')->name('store');
+            Route::get('/{code}/edit',                                  'CodesController@edit')->name('edit');
+            Route::post('/bulk-destroy',                                'CodesController@bulkDestroy')->name('bulk-destroy');
+            Route::post('/{code}',                                      'CodesController@update')->name('update');
+            Route::delete('/{code}',                                    'CodesController@destroy')->name('destroy');
+        });
     });
 });
